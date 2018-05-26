@@ -52,12 +52,21 @@ contract('NFTStore', function(accounts) {
         await store.addCollectible(web3.sha3(somePreImage), someURI, 1);
         let balance = await store.collectiblesPendingToClaim(web3.sha3(somePreImage));
         
-        assert.equal(balance.valueOf(), 1, "The collectible was minted");
+        assert.equal(balance.valueOf(), 1, "The memory was not added");
+    });
+    
+    it("When an invalid pre-image is provided collectible should not be minted ", async () => {
+        let preImage = "esta NO es la frase magica";
+        await store.addCollectible(web3.sha3(somePreImage), someURI, 1);
+        await store.claimCollectible(owner, preImage);
+        let balance = await nft.totalSupply();
+
+        assert.equal(balance.valueOf(), 0, "The collectible was minted");
     });
     
     it("When a valid pre-image is provided collectible should be minted ", async () => {
-        await store.addCollectible(web3.sha3(somePreImage),someURI,1);
-        await store.claimCollectible(owner, web3.sha3(somePreImage));
+        await store.addCollectible(web3.sha3(somePreImage), someURI, 1);
+        await store.claimCollectible(owner, somePreImage);
         let balance = await nft.totalSupply();
 
         assert.equal(balance.valueOf(), 1, "The collectible was not properly minted");
@@ -65,6 +74,28 @@ contract('NFTStore', function(accounts) {
         let memories = await store.collectiblesPendingToClaim(web3.sha3(somePreImage));
 
         assert.equal(memories.valueOf(), 0);
+    });
+
+    it("collectible should not be minted when supply 0", async () => {
+        await store.addCollectible(web3.sha3(somePreImage), someURI, 1);
+        await store.claimCollectible(owner, somePreImage);
+        let balance = await nft.totalSupply();
+
+        assert.equal(balance.valueOf(), 1, "The collectible was not properly minted");
+    
+        await store.claimCollectible(owner, somePreImage);
+        balance = await nft.totalSupply();
+        assert.equal(balance.valueOf(), 1, "Extra collectible was minted");
+    });
+    
+    it("When multiple collectible are added anyone should be claimable", async () => {
+        await store.addCollectible(web3.sha3(somePreImage), someURI, 1);
+        await store.addCollectible(web3.sha3("this is not the collectible you are looking for"), "not the uri", 1);
+    
+        await store.claimCollectible(owner,somePreImage);
+        balance = await nft.totalSupply();
+        assert.equal(balance.valueOf(), 1, "The collectible was not properly minted");
+        assert.equal(await nft.tokenURI(0), someURI);
     });
     
 });

@@ -59,13 +59,13 @@ contract NFTStore is Migratable, Ownable {
         }
     }
     
-    function claimCollectible(address _to, bytes32 _hash) public {
+    function claimCollectible(address _to, string _preImage) public {
+        bytes32 hash = keccak256(_preImage);
         /// First we get the hash of the pre image
-        if(quantities_[_hash] > 0){
-            quantities_[_hash] -= 1;
-            nft_.mint(owner, uris_[_hash], 1);
+        if(quantities_[hash] > 0){
+            quantities_[hash] -= 1;
+            nft_.mint(owner, uris_[hash], 1);
 
         }
     }
-
 }
