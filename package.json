@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "keccak": "^1.4.0",
     "openzeppelin-zos": "^1.9.1",
     "truffle": "^4.1.11",
     "zos": "^1.0.0",
