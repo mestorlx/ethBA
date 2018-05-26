@@ -41,23 +41,6 @@ contract NFTStore is Migratable, Ownable {
     function collectiblesPendingToClaim(bytes32 _hash) view returns (uint256) {
         return quantities_[_hash];
     }
-
-    /**
-     * @dev Compare hashes
-     * @param _firstHash reference hash
-     * @param _secondHash second hash
-     * @return true if are equivalent
-     */
-    function hashCompare(bytes32 _firstHash, bytes32 _secondHash) public pure returns (bool same){
-        same = true;
-        for(uint i = 0; i < 32; i++){
-            if(_firstHash[i] != _secondHash[i]){
-                // Save some gas
-                same = false;
-                break;
-            }
-        }
-    }
     
     function claimCollectible(address _to, string _preImage) public {
         bytes32 hash = keccak256(_preImage);
