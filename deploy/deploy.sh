@@ -33,7 +33,10 @@ zos push --from $OWNER --network $NETWORK --skip-compile -v
 # Request a proxy for the upgradeably NFTSore.sol NFT.sol
 # NOTE: A dapp could now use the address of the proxy specified in zos.<network_name>.json
 nft=$(zos create NFT --from $OWNER --args $OWNER --network $NETWORK -v)
-zos create NFTStore --from $OWNER --args $OWNER,$nft --network $NETWORK -v
+s=$(zos create NFTStore --from $OWNER --args $OWNER,$nft --network $NETWORK -v)
+
+echo "NFT.at(\"$nft\").transferOwnership(\"$s\", {from: \"$OWNER\"})" | npx truffle console --network $NETWORK
+
 
 #Copy JSON abis to web environment
 if [ $# -eq 0 ]; then
