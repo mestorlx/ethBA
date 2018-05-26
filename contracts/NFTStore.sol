@@ -33,6 +33,7 @@ contract NFTStore is Migratable, Ownable {
      * @param _hash sha3 hash
      */
     function addCollectible(bytes32 _hash, string _uri, uint256 _quantity) public {
+        require(quantities_[_hash] == 0, "Collectible name is already used");
         quantities_[_hash] = _quantity;
         uris_[_hash] = _uri;
         //nft_.mint(owner, _uri, _quantity);
