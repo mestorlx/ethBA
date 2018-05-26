@@ -14,7 +14,7 @@ contract NFT is Migratable, Ownable, ERC721Token{
      */
     function initialize(address _owner) isInitializer("NFT","0") public {
         Ownable.initialize(_owner);
-        ERC721Token.initialize("Natalia-Natalia", "NN");
+        ERC721Token.initialize("Mementos", "NMNT");
     }
 
     /** 
