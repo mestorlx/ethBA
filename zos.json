@@ -1,0 +1,11 @@
+{
+  "name": "ethBA",
+  "version": "0.1.0",
+  "contracts": {
+    "NFT": "NFT"
+  },
+  "stdlib": {
+    "name": "openzeppelin-zos",
+    "version": "1.9.1"
+  }
+}

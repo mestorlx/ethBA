@@ -1,0 +1,17 @@
+{
+  "name": "ethba",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx truffle test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openzeppelin-zos": "^1.9.1",
+    "truffle": "^4.1.11",
+    "zos": "^1.0.0",
+    "zos-lib": "^1.0.0"
+  }
+}
