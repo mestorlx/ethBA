@@ -42,6 +42,7 @@ if [ $# -eq 0 ]; then
     else
         cp build/contracts/NFT.json $1/
         cp build/contracts/NFTStore.json $1/
+        cp zos.local.json $1/
 fi
 # Disable command logging
 set +x
