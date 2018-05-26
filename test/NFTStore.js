@@ -18,7 +18,7 @@ async function assertRevert(promise) {
 contract('NFTStore', function(accounts) {
     let owner = accounts[0];
     let notOwner = accounts[1];
-    let defaultURI = "https://uri.test";
+    let someURI = "https://uri.test";
     let store;
     let nft;
     let somePreImage = "esta es la frase magica";
@@ -44,4 +44,27 @@ contract('NFTStore', function(accounts) {
         assert.equal(await nft.owner(), address, "The owner of the NFT is not NFTStore");
     });
     
-   });
+    it("Anyone should be able to add memories", async () => {
+        await store.transferOwnership(notOwner);
+        let contractOwner = await store.owner();
+
+        await assert.notEqual(contractOwner, owner);
+        await store.addCollectible(web3.sha3(somePreImage), someURI, 1);
+        let balance = await store.collectiblesPendingToClaim(web3.sha3(somePreImage));
+        
+        assert.equal(balance.valueOf(), 1, "The collectible was minted");
+    });
+    
+    it("When a valid pre-image is provided collectible should be minted ", async () => {
+        await store.addCollectible(web3.sha3(somePreImage),someURI,1);
+        await store.claimCollectible(owner, web3.sha3(somePreImage));
+        let balance = await nft.totalSupply();
+
+        assert.equal(balance.valueOf(), 1, "The collectible was not properly minted");
+        assert.equal(await nft.tokenURI(0), someURI);
+        let memories = await store.collectiblesPendingToClaim(web3.sha3(somePreImage));
+
+        assert.equal(memories.valueOf(), 0);
+    });
+    
+});

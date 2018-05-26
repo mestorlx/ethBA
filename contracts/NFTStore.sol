@@ -15,6 +15,8 @@ contract NFTStore is Migratable, Ownable {
     NFT public nft_;
     // Store hash to validate preImages quantity
     mapping (bytes32 => uint256) public quantities_;
+    // Store hash with uris
+    mapping (bytes32 => string) public uris_;
 
     /**
      * @dev Constructor function
@@ -30,8 +32,40 @@ contract NFTStore is Migratable, Ownable {
      * @dev Add challenge (hash) to internal array and use default image
      * @param _hash sha3 hash
      */
-    function addCollectible(bytes32 _hash, string _uri, uint256 _quantity) public onlyOwner{
+    function addCollectible(bytes32 _hash, string _uri, uint256 _quantity) public {
         quantities_[_hash] = _quantity;
-        nft_.mint(owner, _uri, _quantity);
+        uris_[_hash] = _uri;
+        //nft_.mint(owner, _uri, _quantity);
     }
+
+    function collectiblesPendingToClaim(bytes32 _hash) view returns (uint256) {
+        return quantities_[_hash];
+    }
+
+    /**
+     * @dev Compare hashes
+     * @param _firstHash reference hash
+     * @param _secondHash second hash
+     * @return true if are equivalent
+     */
+    function hashCompare(bytes32 _firstHash, bytes32 _secondHash) public pure returns (bool same){
+        same = true;
+        for(uint i = 0; i < 32; i++){
+            if(_firstHash[i] != _secondHash[i]){
+                // Save some gas
+                same = false;
+                break;
+            }
+        }
+    }
+    
+    function claimCollectible(address _to, bytes32 _hash) public {
+        /// First we get the hash of the pre image
+        if(quantities_[_hash] > 0){
+            quantities_[_hash] -= 1;
+            nft_.mint(owner, uris_[_hash], 1);
+
+        }
+    }
+
 }
