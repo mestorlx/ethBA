@@ -34,5 +34,14 @@ zos push --from $OWNER --network $NETWORK --skip-compile -v
 # NOTE: A dapp could now use the address of the proxy specified in zos.<network_name>.json
 nft=$(zos create NFT --from $OWNER --args $OWNER --network $NETWORK -v)
 zos create NFTStore --from $OWNER --args $OWNER,$nft --network $NETWORK -v
+
+#Copy JSON abis to web environment
+if [ $# -eq 0 ]; then
+    echo "No folder provided. ABIs will not be copied"
+    exit 1
+    else
+        cp build/contracts/NFT.json $1/
+        cp build/contracts/NFTStore.json $1/
+fi
 # Disable command logging
 set +x
