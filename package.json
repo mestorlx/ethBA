@@ -9,9 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^5.0.1",
     "keccak": "^1.4.0",
     "openzeppelin-zos": "^1.9.1",
     "truffle": "^4.1.11",
+    "truffle-hdwallet-provider": "0.0.5",
     "zos": "^1.0.0",
     "zos-lib": "^1.0.0"
   }
