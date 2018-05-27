@@ -47,9 +47,8 @@ contract NFTStore is Migratable, Ownable {
         bytes32 hash = keccak256(_preImage);
         /// First we get the hash of the pre image
         if(quantities_[hash] > 0){
-            quantities_[hash] -= 1;
             nft_.mint(_to, uris_[hash], 1);
-
+            quantities_[hash] -= 1;
         }
     }
 }
